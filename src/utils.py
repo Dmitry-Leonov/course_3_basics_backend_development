@@ -6,19 +6,26 @@ from datetime import datetime
 
 def load_operation(filename: str) -> list:
     """
-    Функция получения списка словарей из файла
+    Получение списка словарей из файла
     """
     with open(filename, 'r', encoding='utf-8') as file:
         return json.load(file)
 
 
 def check_valid_operation(operation):
+    """
+    Задает условие для фильтрации словаря:
+    словарь не пустой, транзакция EXECUTED и это не открытие вклда
+    """
     return operation.get('date') \
         and operation.get('state') == 'EXECUTED' \
         and operation.get('description') != 'Открытие вклада'
 
 
-def get_executed_operations(operations):
+def get_executed_operations(operations: list) -> list:
+    """
+    Возвращает список словарей по заданным условиям
+    """
     return [
         operation for operation in operations
         if check_valid_operation(operation)
@@ -27,8 +34,7 @@ def get_executed_operations(operations):
 
 def get_last_five_operations(operations: list) -> list:
     """
-    Функция возвращает последние 5 транзакций отсротированных по дате
-    условие: словарь не пустой, транзакция EXECUTED и это не открытие вклда
+    Возвращает последние 5 транзакций отсортированных по дате
     """
     sorted_data_new = sorted(get_executed_operations(operations), key=operator.itemgetter('date'), reverse=True)
     return sorted_data_new[:5]
