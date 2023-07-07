@@ -1,5 +1,8 @@
-from src.utils import sort_by_date
+from src.utils import check_valid_operation
 
 
-def test_sort_by_date():
-    assert sort_by_date([{"ключ1": "значение1"}, {"ключ2": "значение2"}])
+def test_check_valid_operation():
+    assert check_valid_operation({'date': 1, 'state': 'EXECUTED', 'description': 1}) is True
+    assert check_valid_operation({'state': 'EXECUTED', 'description': 1}) is None
+    assert check_valid_operation({'date': 1, 'state': 'EXECU', 'description': 1}) is False
+    assert check_valid_operation({'date': 1, 'state': 'EXECUTED', 'description': 'Открытие вклада'}) is False
